@@ -42,16 +42,15 @@
       </aside>
 
       <div class="col-lg-9 pb-3">
-        <section id="today" class="mt-3" role="region" aria-live="polite">
-          <div class="card p-3 bg-dark-subtle">
-            <h2>London - (1/1/23)</h2>
-            <p>Temperature:</p>
-            <p>Windspeed:</p>
-            <p>Humidity:</p>
+       
+        <section id="today" class="searchContent mt-3 hide" role="region" aria-live="polite">
+           <h2 id="cityName"></h2>
+           <div id="todayCard" class="card p-3 bg-dark-subtle">
+
           </div>
 
         </section>
-        <section id="forecast" class="mt-3" role="region" aria-live="polite">
+        <section id="forecast" class="searchContent mt-3 hide" role="region" aria-live="polite">
           <div class="card p-3 bg-dark-subtle">
             <h2>5 Day Forecast</h2>
             <div id="5dayCards" class="row row-cols-1 row-cols-md-5 g-4">
