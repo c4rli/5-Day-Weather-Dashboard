@@ -2,9 +2,9 @@ function create5DayCard(dataArray, index) {
     var cardBody = $("<div>").addClass("card-body");
     console.log(moment(dataArray[0], "X").format("DD MM YYYY"));
     var dataDate = $("<h5>").text(moment(dataArray[0], "X").format("ddd Do MMM YYYY"));
-    var dataTemp = $("<p>").text(`Temperature: ${dataArray[1]}°c`);
-    var dataWind = $("<p>").text(`Wind Speed: ${dataArray[2]}mph`);
-    var dataHumidity = $("<p>").text(`Humidity: ${dataArray[3]}%`);
+    var dataTemp = $("<p>").html(`<b>Temperature:</b><br>${dataArray[1]}°c`);
+    var dataWind = $("<p>").html(`<b>Wind Speed:</b><br> ${dataArray[2]}mph`);
+    var dataHumidity = $("<p>").html(`<b>Humidity:</b><br> ${dataArray[3]}%`);
     var dataIcon = $("<img>").attr("src", dataArray[4]);
 
     cardBody.append(dataDate, dataIcon, dataTemp, dataWind, dataHumidity);
@@ -44,9 +44,9 @@ function generateTodaysForecast(object) {
     $("#cityName").text(`${(object.name)}, ${(object.sys.country)}`); 
     
     var cardTitle = $("<h2>").text(`${moment(object.dt, "X").format("dddd Do MMMM YYYY")}`);
-    var dataTemp = $("<p>").text(`Temperature: ${todayTemp}°c`);
-    var dataWind = $("<p>").text(`Windspeed: ${todayWind}mph`);
-    var dataHumidity = $("<p>").text(`Humidity: ${todayHumidity}%`);
+    var dataTemp = $("<p>").html(`<b>Temperature:</b> ${todayTemp}°c`);
+    var dataWind = $("<p>").html(`<b>Windspeed:</b> ${todayWind}mph`);
+    var dataHumidity = $("<p>").html(`<b>Humidity:</b> ${todayHumidity}%`);
 
     $("#todayCard").append(cardTitle, dataTemp, dataWind, dataHumidity);
 }

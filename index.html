@@ -20,25 +20,29 @@
   <!-- max-width for ultra wide resolutions -->
   <div class="container-fluid" style="max-width: 1400px">
     <div class="row">
-      <aside class="col-lg-3 pb-3">
+      <aside class="col-lg-3 pb-3 mt-3">
         <h2 id="form-heading" class="mt-1 h3 form-label">
           Search for a City:
         </h2>
+        <div class="card p-3 bg-dark-subtle">
         <form id="search-form" class="form">
           <div class="form-inline form-group">
+            
             <div class="input-group">
-              <input class="form-input weather-search" type="text" id="search-input" placeholder="London"
-                aria-labelledby="form-heading" aria-controls="today forecast" />
-              <div class="input-group-append">
-                <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
-                  Search
-                </button>
-                <hr class="hr weather-hr" />
-              </div>
+              <input type="text" class="form-control" id="search-input" placeholder="London"
+              aria-labelledby="form-heading" aria-controls="today forecast">
+              <input type="text" class="form-control" id="search-input" placeholder="State (Optional)"
+              aria-labelledby="form-heading" aria-controls="today forecast">
+              <button class="btn btn-outline-secondary" type="submit" id="search-button" aria-label="submit search">Search</button>
             </div>
+
           </div>
         </form>
-        <div class="list-group" id="history"></div>
+      </div>
+      <div class="card mt-3 p-3 bg-dark-subtle"> 
+        <div class="list-group" id="history"> NO HISTORY</div>
+      </div>
+
       </aside>
 
       <div class="col-lg-9 pb-3">
@@ -53,7 +57,7 @@
         <section id="forecast" class="searchContent mt-3 hide" role="region" aria-live="polite">
           <div class="card p-3 bg-dark-subtle">
             <h2>5 Day Forecast</h2>
-            <div id="5dayCards" class="row row-cols-1 row-cols-md-5 g-4">
+            <div id="5dayCards" class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4">
               
             </div>
 
