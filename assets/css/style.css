@@ -3,10 +3,8 @@
 }
 
 #todayCard {
-    
     background-image: url("http://openweathermap.org/img/wn/01n@4x.png");
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
+    background-position: center right;
 
 }
