@@ -1,11 +1,11 @@
-function create5DayCard(dataArray, index) {
+function create5DayCard(dataSet, index) {
     var cardBody = $("<div>").addClass("card-body");
-    console.log(moment(dataArray[0], "X").format("DD MM YYYY"));
-    var dataDate = $("<h5>").text(moment(dataArray[0], "X").format("ddd Do MMM"));
-    var dataTemp = $("<p>").html(`<b>Temperature:</b><br>${dataArray[1]}°c`);
-    var dataWind = $("<p>").html(`<b>Wind Speed:</b><br> ${dataArray[2]}mph`);
-    var dataHumidity = $("<p>").html(`<b>Humidity:</b><br> ${dataArray[3]}%`);
-    var dataIcon = $("<img>").attr("src", dataArray[4]);
+    console.log(moment(dataSet.dateTime, "X").format("DD MM YYYY"));
+    var dataDate = $("<h5>").text(moment(dataSet.dateTime, "X").format("ddd Do MMM"));
+    var dataTemp = $("<p>").html(`<b>Temperature:</b><br>${dataSet.temperature}°c`);
+    var dataWind = $("<p>").html(`<b>Wind Speed:</b><br> ${dataSet.windSpeed}mph`);
+    var dataHumidity = $("<p>").html(`<b>Humidity:</b><br> ${dataSet.humidity}%`);
+    var dataIcon = $("<img>").attr("src", dataSet.iconURL);
 
     cardBody.append(dataDate, dataIcon, dataTemp, dataWind, dataHumidity);
     var card = $("<div>").addClass("card");
@@ -21,37 +21,47 @@ function generate5DayForecast(object) {
     $("#5dayCards").empty();
 
     for (var i = 0; i < 5; i++) {
-        var dataSet = [];
-        dataSet.push(object.list[objectElement].dt);
-        dataSet.push(object.list[objectElement].main.temp);
-        dataSet.push(object.list[objectElement].wind.speed);
-        dataSet.push(object.list[objectElement].main.humidity);
-        dataSet.push(`http://openweathermap.org/img/wn/${object.list[objectElement].weather[0].icon}.png`);
+        var dataSet = {
+            dateTime: object.list[objectElement].dt,
+            temperature: object.list[objectElement].main.temp,
+            windSpeed: object.list[objectElement].wind.speed,
+            humidity: object.list[objectElement].main.humidity,
+            iconURL: (`http://openweathermap.org/img/wn/${object.list[objectElement].weather[0].icon}.png`)
+        };
         forecastArray.push(dataSet);
         objectElement += 8;
     }
 
-    forecastArray.forEach(function (dataArray, index) {
-        create5DayCard(dataArray, index);
+    forecastArray.forEach(function (dataSet, index) {
+        create5DayCard(dataSet, index);
     });
 }
 
 function generateTodaysForecast(object) {
     console.log(object)
-    var todayTemp = object.main.temp;
-    var todayWind = object.wind.speed;
-    var todayHumidity = object.main.humidity;
-    var bgImgURL = object.weather[0].icon;
-    $("#todayCard").empty();
-    $("#cityName").text(`${(object.name)}, ${(object.sys.country)}`); 
-    
-    var cardTitle = $("<h2>").text(`${moment(object.dt, "X").format("dddd Do MMMM YYYY")}`);
-    var dataTemp = $("<p>").html(`<b>Temperature:</b> ${todayTemp}°c`);
-    var dataWind = $("<p>").html(`<b>Windspeed:</b> ${todayWind}mph`);
-    var dataHumidity = $("<p>").html(`<b>Humidity:</b> ${todayHumidity}%`);
-    $("#todayCard").css("background-image",`url("http://openweathermap.org/img/wn/${bgImgURL}@4x.png")`)
+    var dataSet = {
+        location: {
+            city: object.name,
+            countryCode: object.sys.country
+        },
+        dateTime: object.dt,
+        temperature: object.main.temp,
+        windSpeed: object.wind.speed,
+        humidity: object.main.humidity,
+        iconURL: object.weather[0].icon
+    }
 
-    $("#todayCard").append(cardTitle, dataTemp, dataWind, dataHumidity);
+    $("#todayCard").empty();
+    $("#cityName").text(`${(dataSet.location.city)}, ${(dataSet.location.countryCode)}`); 
+    
+    var cardTitle = $("<h2>").text(`${moment(dataSet.dateTime, "X").format("dddd Do MMMM YYYY")}`);
+    var dataTemp = $("<p>").html(`<b>Temperature:</b> ${dataSet.temperature}°c`);
+    var dataWind = $("<p>").html(`<b>Windspeed:</b> ${dataSet.windSpeed}mph`);
+    var dataHumidity = $("<p>").html(`<b>Humidity:</b> ${dataSet.humidity}%`);
+
+    $("#todayCard").append(cardTitle, dataTemp, dataWind, dataHumidity)
+        .css("background-image",`url("http://openweathermap.org/img/wn/${dataSet.iconURL}@4x.png")`);
+    
 }
 
 $("#search-button").on("click", function (event) {
@@ -64,9 +74,6 @@ $("#search-button").on("click", function (event) {
     $.ajax({
         url: queryURL1,
         method: "GET",
-        error: function(x){
-            
-        }
         
     }).then(function (geoResponse) {
         var queryToday = (`https://api.openweathermap.org/data/2.5/weather?lat=${geoResponse[0].lat}&lon=${geoResponse[0].lon}&appid=${apiKey}&units=metric`);
@@ -87,5 +94,7 @@ $("#search-button").on("click", function (event) {
         });              
         
 
+    }).fail(function(){
+        alert(search + " Not found");
     });
 });
