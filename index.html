@@ -33,28 +33,29 @@
               aria-labelledby="form-heading" aria-controls="today forecast">
               <input type="text" class="form-control" id="search-input" placeholder="State (Optional)"
               aria-labelledby="form-heading" aria-controls="today forecast">
-              <button class="btn btn-outline-secondary" type="submit" id="search-button" aria-label="submit search">Search</button>
+              <button class="btn btn-outline-secondary search" type="submit" id="search-button" aria-label="submit search">Search</button>
             </div>
 
           </div>
         </form>
       </div>
-      <div class="card mt-3 p-3 bg-dark-subtle"> 
-        <div class="list-group" id="history"> NO HISTORY</div>
+      <div class="card mt-3 p-3 bg-dark-subtle" id="historyContainer"> 
+        <div class="list-group" id="history"></div>
+        <button class="btn btn-danger" id="delete-button" onclick="clearHistory()">Delete</button>
       </div>
 
       </aside>
 
-      <div class="col-lg-9 pb-3">
+      <div id="searchResult" class="col-lg-9 pb-3 hide">
        
-        <section id="today" class="searchContent mt-3 hide" role="region" aria-live="polite">
+        <section id="today" class="searchContent mt-3" role="region" aria-live="polite">
            <h2 id="cityName"></h2>
            <div id="todayCard" class="card p-3 bg-dark-subtle">
 
           </div>
 
         </section>
-        <section id="forecast" class="searchContent mt-3 hide" role="region" aria-live="polite">
+        <section id="forecast" class="searchContent mt-3" role="region" aria-live="polite">
           <div class="card p-3 bg-dark-subtle">
             <h2>5 Day Forecast</h2>
             <div id="5dayCards" class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-4">

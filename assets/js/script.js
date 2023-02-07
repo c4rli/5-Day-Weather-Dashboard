@@ -1,3 +1,48 @@
+function getSearches() {
+    if (localStorage.getItem("searchArray") == '' || localStorage.getItem("searchArray") === null) {
+        searchArray = [];
+    } else {
+        searchArray = JSON.parse(localStorage.getItem("searchArray"));
+    }
+    
+    return searchArray;
+}
+
+function addSearch(search){
+    var searchArray = getSearches()
+    if (searchArray.length >= 10 ){
+        searchArray.pop();
+    }
+    searchArray.unshift(search);
+    console.log(searchArray);
+    localStorage.setItem("searchArray", JSON.stringify(searchArray));
+}
+
+function showHistory(){
+    var searchArray = getSearches()
+    $("#history").empty();
+    
+    if(searchArray.length > 0){
+    searchArray.forEach(function (search, index){
+        var searchButton = $("<button>")
+        .addClass("btn btn-outline-secondary mb-2 search")
+        .text(search)
+        .attr("data-index", index);
+        $("#history").append(searchButton);
+        })
+
+        $("#historyContainer").show();
+    }
+    else {
+        $("#historyContainer").hide();
+    }
+}
+
+function clearHistory(){
+    localStorage.removeItem("searchArray");
+    showHistory();
+}
+
 function create5DayCard(dataSet, index) {
     var cardBody = $("<div>").addClass("card-body");
     console.log(moment(dataSet.dateTime, "X").format("DD MM YYYY"));
@@ -64,10 +109,19 @@ function generateTodaysForecast(object) {
     
 }
 
-$("#search-button").on("click", function (event) {
+$(document).on("click",".search", function (event) {
     event.preventDefault();
+    var eventEl = $(event.target);
     
-    var search = $("#search-input").val();
+    if(eventEl.attr("id") == "search-button"){
+         var search = $("#search-input").val();
+         var newSearch = true;
+    }
+    else {
+        var searchArray = getSearches();
+        var search = searchArray[eventEl.attr("data-index")];
+        var newSearch = false;
+    }
     var apiKey = "a32c896a5efe5c837799909bac3a9141";
     var queryURL1 = (`https://api.openweathermap.org/geo/1.0/direct?limit=5&q=${search}&appid=${apiKey}`);
     
@@ -82,7 +136,10 @@ $("#search-button").on("click", function (event) {
             method: "GET"
         }).then(function (response) {
             generateTodaysForecast(response);
-            $(".searchContent").removeClass("hide");
+            if (newSearch){
+            addSearch(response.name);
+            showHistory();
+            }
         });
 
         var query5Day = (`https://api.openweathermap.org/data/2.5/forecast?lat=${geoResponse[0].lat}&lon=${geoResponse[0].lon}&appid=${apiKey}&units=metric`);
@@ -90,11 +147,15 @@ $("#search-button").on("click", function (event) {
             url: query5Day,
             method: "GET"
         }).then(function (response) {
-            generate5DayForecast(response);
-        });              
-        
+            generate5DayForecast(response); 
+            $("#searchResult").removeClass("hide");
+        });
 
     }).fail(function(){
         alert(search + " Not found");
     });
 });
+
+showHistory();
+
+
